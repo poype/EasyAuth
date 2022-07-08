@@ -14,8 +14,6 @@ import java.util.List;
 @ToString
 public class UserAuthDetails implements UserDetails {
 
-    private User user;
-
     private Identification identification;
 
     private List<Permission> permissionList;
@@ -23,8 +21,7 @@ public class UserAuthDetails implements UserDetails {
     public UserAuthDetails() {
     }
 
-    public UserAuthDetails(User user, Identification identification, List<Permission> permissionList) {
-        this.user = user;
+    public UserAuthDetails(Identification identification, List<Permission> permissionList) {
         this.identification = identification;
         this.permissionList = permissionList;
     }
