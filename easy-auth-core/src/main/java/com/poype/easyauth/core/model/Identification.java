@@ -13,9 +13,9 @@ public class Identification {
 
     private long id;
 
-    private long userId;
+    private String userId;
 
-    private String status;
+    private int status;
 
     private String username;
 
