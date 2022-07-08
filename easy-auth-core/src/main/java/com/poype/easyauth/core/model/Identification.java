@@ -17,7 +17,7 @@ public class Identification {
 
     private String status;
 
-    private String loginId;
+    private String username;
 
     private String password;
 
