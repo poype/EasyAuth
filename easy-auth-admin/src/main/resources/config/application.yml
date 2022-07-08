@@ -1,0 +1,25 @@
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+
+spring:
+  profiles:
+    active: dev
+  application:
+    name: easy-auth-admin
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/easy_auth
+    username: root
+    password: qwe123
+    hikari:
+      minimum-idle: 10
+      maximum-pool-size: 20
+      connection-timeout: 3000
+
+server:
+  port: 8080
+
+logging:
+  level:
+    root: info
+
