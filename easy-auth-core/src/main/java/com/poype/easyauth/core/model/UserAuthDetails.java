@@ -28,7 +28,8 @@ public class UserAuthDetails implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return permissionList;
+        return null;
+//        return permissionList;
     }
 
     @Override

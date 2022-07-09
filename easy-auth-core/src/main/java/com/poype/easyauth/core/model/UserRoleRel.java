@@ -13,9 +13,11 @@ public class UserRoleRel {
 
     private long id;
 
-    private long userId;
+    private String userId;
 
     private int roleId;
+
+    private int status;
 
     private Date createTime;
 

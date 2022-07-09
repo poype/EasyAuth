@@ -18,7 +18,7 @@ public class Role {
 
     private String description;
 
-    private String status;
+    private int status;
 
     private List<Integer> permissionIdList;
 

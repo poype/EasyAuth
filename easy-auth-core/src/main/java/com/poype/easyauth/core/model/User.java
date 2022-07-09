@@ -11,9 +11,9 @@ import java.util.Date;
 @ToString
 public class User {
 
-    private long id;
+    private String id;
 
-    private String status;
+    private int status;
 
     private String nickName;
 
