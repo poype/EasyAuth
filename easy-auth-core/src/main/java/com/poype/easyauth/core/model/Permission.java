@@ -18,7 +18,7 @@ public class Permission implements GrantedAuthority {
 
     private String description;
 
-    private String status;
+    private int status;
 
     private Date createTime;
 

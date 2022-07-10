@@ -7,7 +7,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
-import java.util.List;
+import java.util.Set;
 
 @Setter
 @Getter
@@ -16,20 +16,19 @@ public class UserAuthDetails implements UserDetails {
 
     private Identification identification;
 
-    private List<Permission> permissionList;
+    private Set<Permission> permissions;
 
     public UserAuthDetails() {
     }
 
-    public UserAuthDetails(Identification identification, List<Permission> permissionList) {
+    public UserAuthDetails(Identification identification, Set<Permission> permissions) {
         this.identification = identification;
-        this.permissionList = permissionList;
+        this.permissions = permissions;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
-//        return permissionList;
+        return permissions;
     }
 
     @Override
