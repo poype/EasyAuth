@@ -12,6 +12,9 @@
     </resultMap>
 
     <select id="queryByIds" resultMap="permission_result_map">
-        select * from permission where id in #{idList})
+        select * from permission where id in
+        <foreach collection="idList" item="id" index="index" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
     </select>
 </mapper>

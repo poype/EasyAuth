@@ -46,6 +46,7 @@ public class UserDetailServiceImpl implements UserDetailsService {
         for (Role role : roleList) {
             allPermissions.addAll(permissionRepository.queryByIds(role.getPermissionIdList()));
         }
+        log.info("all permissions: {}", allPermissions);
 
         return new UserAuthDetails(identification, allPermissions);
     }

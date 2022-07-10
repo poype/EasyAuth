@@ -11,5 +11,5 @@ import java.util.List;
 @Mapper
 public interface PermissionRepository {
 
-    List<Permission> queryByIds(@Param("idLists") List<Integer> idList);
+    List<Permission> queryByIds(@Param("idList") List<Integer> idList);
 }
