@@ -7,7 +7,8 @@
         <result column="name" property="name"/>
         <result column="description" property="description"/>
         <result column="status" property="status"/>
-        <result column="permission_id_list" property="permissionIdList"/>
+        <result column="permission_id_list" property="permissionIdList"
+                typeHandler="com.poype.easyauth.core.repository.type_handler.JsonTypeHandler"/>
         <result column="create_time" property="createTime"/>
         <result column="update_time" property="updateTime"/>
     </resultMap>

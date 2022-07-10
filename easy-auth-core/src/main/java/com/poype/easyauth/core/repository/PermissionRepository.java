@@ -5,5 +5,5 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Mapper
-public class PermissionRepository {
+public interface PermissionRepository {
 }
