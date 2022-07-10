@@ -13,7 +13,7 @@
         <result column="update_time" property="updateTime"/>
     </resultMap>
 
-    <resultMap id="user_role_rel_result_map" type="com.poype.easyauth.core.model.Role">
+    <resultMap id="user_role_rel_result_map" type="com.poype.easyauth.core.model.UserRoleRel">
         <result column="id" property="id"/>
         <result column="user_id" property="userId"/>
         <result column="role_id" property="roleId"/>
@@ -22,7 +22,7 @@
         <result column="update_time" property="updateTime"/>
     </resultMap>
 
-    <select id="queryRoleListByUserId" resultMap="user_result_map">
-        select * from role where id in (select roleId from user_role_rel where user_id = #{userId})
+    <select id="queryRoleListByUserId" resultMap="role_result_map">
+        select * from role where id in (select role_id from user_role_rel where user_id = #{userId})
     </select>
 </mapper>
