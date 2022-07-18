@@ -16,11 +16,19 @@ public class JwtUtil {
 
     private static final Algorithm algorithm = Algorithm.HMAC256("h5#9%3%^*FxA");
 
-    public static String createJWT(String userId, List<String> permissionNameList, String token) {
+    public static final String userIdKey = "userId";
+
+    public static final String permissionListKey = "pList";
+
+    public static final String accessTokenKey = "token";
+
+    public static final String isJwtExpire = "isExpire";
+
+    public static String createJWT(String userId, List<String> permissionList, String accessToken) {
         Map<String, Object> payload = new HashMap<>();
-        payload.put("userId", userId);
-        payload.put("pList", permissionNameList);
-        payload.put("token", token);
+        payload.put(userIdKey, userId);
+        payload.put(permissionListKey, permissionList);
+        payload.put(accessTokenKey, accessToken);
 
         return JWT.create()
                 .withPayload(payload)
@@ -28,21 +36,28 @@ public class JwtUtil {
                 .sign(algorithm);
     }
 
-    public static void parseJWT(String jwtStr) {
+    /**
+     * @return parseResultMap 中包含4个key：isJwtExpire、userIdKey、permissionListKey、accessTokenKey
+     * isJwtExpire表示jwt是否超期
+     */
+    public static Map<String, String> parseJWT(String jwtStr) {
         DecodedJWT decodedJWT = JWT.decode(jwtStr);
         // 验证签名
         algorithm.verify(decodedJWT);
 
+        Map<String, String> parseResultMap = new HashMap<>();
+
         Date expiresAt = decodedJWT.getExpiresAt();
         Date now = new Date();
         if (now.after(expiresAt)) {
-            // todo JWT已过期，使用token对其进行刷新
-
+            parseResultMap.put(isJwtExpire, Constant.TRUE_STR);
+        } else {
+            parseResultMap.put(isJwtExpire, Constant.FALSE_STR);
         }
-
-        System.out.println(decodedJWT.getClaim("userId"));
-        System.out.println(decodedJWT.getClaim("pList"));
-        System.out.println(decodedJWT.getClaim("token"));
+        parseResultMap.put(userIdKey, decodedJWT.getClaim(userIdKey).asString());
+        parseResultMap.put(permissionListKey, decodedJWT.getClaim(permissionListKey).asString());
+        parseResultMap.put(accessTokenKey, decodedJWT.getClaim(accessTokenKey).asString());
+        return parseResultMap;
     }
 }
 

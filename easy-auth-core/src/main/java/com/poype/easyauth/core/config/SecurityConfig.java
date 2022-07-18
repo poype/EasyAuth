@@ -1,14 +1,20 @@
 package com.poype.easyauth.core.config;
 
+import com.poype.easyauth.core.common.filter.CheckAuthenticationFilter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+    @Autowired
+    private CheckAuthenticationFilter checkAuthenticationFilter;
 
     @Bean
     @Override
@@ -29,5 +35,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .antMatchers("/admin/login").anonymous()
             // 其它接口都需要认证
             .anyRequest().authenticated();
+
+        // 把checkAuthenticationFilter 添加在 UsernamePasswordAuthenticationFilter的前面
+        http.addFilterBefore(checkAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
     }
 }
