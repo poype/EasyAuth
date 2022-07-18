@@ -3,13 +3,11 @@ package com.poype.easyauth.core.common.util;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.poype.easyauth.core.model.Permission;
 
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class JwtUtil {
 
@@ -18,10 +16,7 @@ public class JwtUtil {
 
     private static final Algorithm algorithm = Algorithm.HMAC256("h5#9%3%^*FxA");
 
-    public static String createJWT(String userId, List<Permission> permissionList, String token) {
-        List<String> permissionNameList =
-                permissionList.stream().map(Permission::getName).collect(Collectors.toList());
-
+    public static String createJWT(String userId, List<String> permissionNameList, String token) {
         Map<String, Object> payload = new HashMap<>();
         payload.put("userId", userId);
         payload.put("pList", permissionNameList);

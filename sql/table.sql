@@ -43,10 +43,23 @@ CREATE TABLE `permission` (
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb3;
 
 CREATE TABLE `user` (
-    `id` char(15) NOT NULL AUTO_INCREMENT,
+    `id` char(15) NOT NULL,
     `status` tinyint NOT NULL,
     `nickname` varchar(50) NOT NULL,
     `update_time` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     `create_time` datetime DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb3;
+
+CREATE TABLE `access_token` (
+   `id` bigint NOT NULL AUTO_INCREMENT,
+   `user_id` char(15) DEFAULT NULL,
+   `status` tinyint NOT NULL,
+   `access_token` char(32) NOT NULL,
+   `permissions` varchar(1024) NOT NULL,
+   `expires_at` datetime NOT NULL,
+   `update_time` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+   `create_time` datetime DEFAULT CURRENT_TIMESTAMP,
+   PRIMARY KEY (`id`),
+   UNIQUE KEY `token_unique` (`access_token`)
+ ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3
