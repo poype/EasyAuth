@@ -1,7 +1,9 @@
 package com.poype.easyauth.core.common.filter;
 
+import com.poype.easyauth.core.common.dto.JwtParseDto;
 import com.poype.easyauth.core.common.util.JwtUtil;
 import com.poype.easyauth.core.model.Permission;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -14,9 +16,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Component
 public class CheckAuthenticationFilter extends OncePerRequestFilter {
 
@@ -32,21 +34,20 @@ public class CheckAuthenticationFilter extends OncePerRequestFilter {
             return;
         }
 
-        Map<String, Object> parseResultMap = JwtUtil.parseJWT(jwtStr);
-        System.out.println(parseResultMap);
-        if ((Boolean) parseResultMap.get(JwtUtil.isJwtExpire)) {
+        JwtParseDto parseResult = JwtUtil.parseJWT(jwtStr);
+        log.info("parseResult: {}", parseResult);
+
+        if (parseResult.isExpire()) {
             // todo jwt超期，需要刷新
         }
 
-        List<String> permissionNames = (List<String>) parseResultMap.get(JwtUtil.permissionListKey);
-        List<Permission> permissionList = permissionNames.stream()
-                                                        .map(Permission::new)
-                                                        .collect(Collectors.toList());
+        List<Permission> permissionList = parseResult.getPermissionNames()
+                                                     .stream()
+                                                     .map(Permission::new)
+                                                     .collect(Collectors.toList());
 
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-                parseResultMap.get(JwtUtil.userIdKey),
-                null,
-                permissionList);
+        UsernamePasswordAuthenticationToken authenticationToken =
+                new UsernamePasswordAuthenticationToken(parseResult.getUserId(), null, permissionList);
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
         filterChain.doFilter(request, response);
     }

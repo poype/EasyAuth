@@ -3,6 +3,7 @@ package com.poype.easyauth.core.common.util;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.poype.easyauth.core.common.dto.JwtParseDto;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -36,28 +37,20 @@ public class JwtUtil {
                 .sign(algorithm);
     }
 
-    /**
-     * @return parseResultMap 中包含4个key：isJwtExpire、userIdKey、permissionListKey、accessTokenKey
-     * isJwtExpire表示jwt是否超期
-     */
-    public static Map<String, Object> parseJWT(String jwtStr) {
+    public static JwtParseDto parseJWT(String jwtStr) {
         DecodedJWT decodedJWT = JWT.decode(jwtStr);
         // 验证签名
         algorithm.verify(decodedJWT);
 
-        Map<String, Object> parseResultMap = new HashMap<>();
-
         Date expiresAt = decodedJWT.getExpiresAt();
         Date now = new Date();
-        if (now.after(expiresAt)) {
-            parseResultMap.put(isJwtExpire, true);
-        } else {
-            parseResultMap.put(isJwtExpire, false);
-        }
-        parseResultMap.put(userIdKey, decodedJWT.getClaim(userIdKey).asString());
-        parseResultMap.put(permissionListKey, decodedJWT.getClaim(permissionListKey).asList(String.class));
-        parseResultMap.put(accessTokenKey, decodedJWT.getClaim(accessTokenKey).asString());
-        return parseResultMap;
+
+        return JwtParseDto.builder()
+                    .userId(decodedJWT.getClaim(userIdKey).asString())
+                    .permissionNames(decodedJWT.getClaim(permissionListKey).asList(String.class))
+                    .accessToken(decodedJWT.getClaim(accessTokenKey).asString())
+                    .isExpire(now.after(expiresAt))
+                    .build();
     }
 }
 
