@@ -23,8 +23,6 @@ public class JwtUtil {
 
     public static final String accessTokenKey = "token";
 
-    public static final String isJwtExpire = "isExpire";
-
     public static String createJWT(String userId, List<String> permissionList, String accessToken) {
         Map<String, Object> payload = new HashMap<>();
         payload.put(userIdKey, userId);
