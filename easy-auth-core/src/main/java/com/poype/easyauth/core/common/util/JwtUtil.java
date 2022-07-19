@@ -40,22 +40,22 @@ public class JwtUtil {
      * @return parseResultMap 中包含4个key：isJwtExpire、userIdKey、permissionListKey、accessTokenKey
      * isJwtExpire表示jwt是否超期
      */
-    public static Map<String, String> parseJWT(String jwtStr) {
+    public static Map<String, Object> parseJWT(String jwtStr) {
         DecodedJWT decodedJWT = JWT.decode(jwtStr);
         // 验证签名
         algorithm.verify(decodedJWT);
 
-        Map<String, String> parseResultMap = new HashMap<>();
+        Map<String, Object> parseResultMap = new HashMap<>();
 
         Date expiresAt = decodedJWT.getExpiresAt();
         Date now = new Date();
         if (now.after(expiresAt)) {
-            parseResultMap.put(isJwtExpire, Constant.TRUE_STR);
+            parseResultMap.put(isJwtExpire, true);
         } else {
-            parseResultMap.put(isJwtExpire, Constant.FALSE_STR);
+            parseResultMap.put(isJwtExpire, false);
         }
         parseResultMap.put(userIdKey, decodedJWT.getClaim(userIdKey).asString());
-        parseResultMap.put(permissionListKey, decodedJWT.getClaim(permissionListKey).asString());
+        parseResultMap.put(permissionListKey, decodedJWT.getClaim(permissionListKey).asList(String.class));
         parseResultMap.put(accessTokenKey, decodedJWT.getClaim(accessTokenKey).asString());
         return parseResultMap;
     }

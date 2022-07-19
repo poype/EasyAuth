@@ -5,8 +5,6 @@ import lombok.Setter;
 import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 
-import java.util.Date;
-
 @Setter
 @Getter
 @ToString
@@ -20,9 +18,12 @@ public class Permission implements GrantedAuthority {
 
     private int status;
 
-    private Date createTime;
+    public Permission() {
+    }
 
-    private Date updateTime;
+    public Permission(String name) {
+        this.name = name;
+    }
 
     @Override
     public String getAuthority() {
