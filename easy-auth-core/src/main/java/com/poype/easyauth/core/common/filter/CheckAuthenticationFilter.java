@@ -22,6 +22,8 @@ import java.util.stream.Collectors;
 @Component
 public class CheckAuthenticationFilter extends OncePerRequestFilter {
 
+    private final String LOGIN_PAGE_PATH = "/login";
+
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
@@ -29,8 +31,13 @@ public class CheckAuthenticationFilter extends OncePerRequestFilter {
 
         String jwtStr = request.getHeader("Authentication");
         if (StringUtils.isEmpty(jwtStr)) {
-            // 直接放行，交由后面的Filter处理
-            filterChain.doFilter(request, response);
+            if (request.getRequestURI().equals(LOGIN_PAGE_PATH)) {
+                // 登录页面，直接放行，交由后面的Filter处理
+                filterChain.doFilter(request, response);
+            } else {
+                // 用户未登录，redirect到login页面
+                redirectToLoginPage(response);
+            }
             return;
         }
 
@@ -50,5 +57,10 @@ public class CheckAuthenticationFilter extends OncePerRequestFilter {
                 new UsernamePasswordAuthenticationToken(parseResult.getUserId(), null, permissionList);
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
         filterChain.doFilter(request, response);
+    }
+
+    private void redirectToLoginPage(HttpServletResponse response) throws IOException {
+        response.setStatus(HttpServletResponse.SC_FOUND);
+        response.sendRedirect(LOGIN_PAGE_PATH);
     }
 }
