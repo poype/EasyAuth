@@ -8,7 +8,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.LogoutFilter;
 
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
@@ -37,6 +37,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .anyRequest().authenticated();
 
         // 把checkAuthenticationFilter 添加在 UsernamePasswordAuthenticationFilter的前面
-        http.addFilterBefore(checkAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(checkAuthenticationFilter, LogoutFilter.class);
     }
 }
